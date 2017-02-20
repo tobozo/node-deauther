@@ -1,0 +1,21 @@
+{
+  "name": "node-deauther",
+  "version": "1.0.0",
+  "description": "ESP8266 deauther serial node frontend",
+  "main": "index-serial.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tobozo",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^2.0.0",
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "jsonfile": "^2.4.0",
+    "netinterfaces": "0.0.2",
+    "serialport": "^4.0.7",
+    "socket.io": "^1.5.1",
+    "wireless": "^0.3.2"
+  }
+}
