@@ -1,7 +1,7 @@
 /*
 
-  RPi-GPS-Wifi logger
-  (c+) tobozo 2016-11-13
+  node-deauther
+  (c+) tobozo 2017-02-21
 
  */
 
@@ -20,30 +20,10 @@ const app = require('express')()
 // throw some vars
 let connected = false
   , killing_app = false
-  , oldalias = 0
-  , oldaliasw = 0
-  , wlanup = false
-  , nmeawifi = false
-  , nmeawifienabled = true
-  , secondsSinceLastPoll = 0
   , fixPoll = []
-  , lastFix
-  , gpsMaxLength = 1000
-  , currentFix
-  , secondsSinceLastFix = 0
-  , dataDir = __dirname + '/data'
-  , geoDataDir = dataDir + '/gps/'
-  , wifiDataDir = dataDir + '/wifi/'
   , htmlDir =  __dirname + '/www'
-  , pollFiles = []
-  , wifiFiles = []
-  , wifiMaxHistoryItems = 100
-  , googleMapsApiKey = process.env.apiKey
-  , wifiCache = { }
-  , gpstime = new Date()
   , port
   , listener
-  , lastDataReceived
 ;
 
 

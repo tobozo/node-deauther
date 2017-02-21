@@ -1,3 +1,8 @@
+/*
+  node-deauther
+  (c+) tobozo 2017-02-21
+*/
+
 var wifiCache = {},
     wifiTimeline = [],
     wifiSort = 'quality',
