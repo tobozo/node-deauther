@@ -5,9 +5,6 @@
 
  */
 
-require('dotenv').config();
-require('netinterfaces').patch();
-
 // load app stack
 const app = require('express')()
   , http = require('http').Server(app)
