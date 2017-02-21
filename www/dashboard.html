@@ -350,7 +350,6 @@ fieldset.wifisource {
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="/jquery-ui-timepicker-addon.js"></script>
-<script src="//maps.googleapis.com/maps/api/js?key=<%= apiKey %>&libraries=visualization,geometry"></script>
 <header>
   <div class="dataviz">
     <div class="title">GPS Satellites</div>
@@ -362,18 +361,6 @@ fieldset.wifisource {
   <div class="wifi-wrapper">
     <div class="title">
       <button class="refresh" title="AP Scan">🔄</button>
-      <div style="display:none"?
-        Wifi 
-        <select id="wifi-named-by" onchange="setWifiName()">
-          <option selected value="ssid">ssid</option>
-          <option value="address">address</option>
-        </select>
-        sorted by
-        <select id="wifi-sort-by" onchange="setWifiSort()">
-          <option selected value="quality">quality</option>
-          <option value="strength">strength</option>
-        </select>
-      </div>
     </div>
     <div class="wifi-list">Loading...</div>
     <div class="legend">
