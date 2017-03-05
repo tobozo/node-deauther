@@ -1,0 +1,3 @@
+[submodule "SerialServer"]
+	path = SerialServer
+	url = https://github.com/tobozo/SerialServer
