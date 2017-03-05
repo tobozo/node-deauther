@@ -1,9 +1,9 @@
 /*
 
   node-esp8266-deauther Serial to HTTP Bridge
-  
+
   (c+) tobozo 2017-03-05
-  
+
   Requirements: an ESP8266 running esp8266_deauther in SerialServer mode
   and connected to the serial port
 
@@ -11,9 +11,9 @@
     - https://github.com/spacehuhn/esp8266_deauther
 
   This module will act as a proxy for static files only.
-  
-  
-    
+
+
+
  */
 
 // load app stack
@@ -46,7 +46,7 @@ port = new SerialPort(SERIAL_PORT, {
 });
 
 port.on('open', () => {
-    console.log('Serial port open, hoping a GPS is there and relaying at '+BAUD_RATE+' bauds');
+    console.log('Serial port open and relaying at '+BAUD_RATE+' bauds');
 });
 
 port.on('error', (err) => {
@@ -56,7 +56,7 @@ port.on('error', (err) => {
 port.on('data', function(data) {
 
   let delims = 0;
-  
+
   serialstack.push(data);
 
   // build http query from collected elements
@@ -68,42 +68,32 @@ port.on('data', function(data) {
         let parts = stack.split(':');
         if(parts.length===2) {
           if(httpstack[parts[0].trim()]!==undefined) return;
-          //console.log('got header', parts);
           httpstack[parts[0].trim()] = parts[1].trim();
         }
       }
     }
   });
-  
+
   if(data.trim()==='') { // separator or ending delimiter found
     if(delims==2) {
       if(httpstack['Content-Length']!==undefined) {
         if(httpstack['body'].length == 0- -httpstack['Content-Length']) {
-          // yay ! 
           handleHTTPResponse(httpstack);
         } else {
-          // size mismatch ?
           console.log('size mismatch', httpstack['Content-Length'], httpstack['body'].length);
         }
-      } else {
-        // multiline or malformed HTTP request ?
-        console.log('multiline query');
       }
-
     }
   } else {
     if(delims>0) { // body
-      //console.log('stack len', data.length);
       if(httpstack['body']===undefined) {
         httpstack['body'] = data;
       } else {
         httpstack['body'] += data;
       }
-    } else { // headers
-      //console.log(data);
     }
   }
-  
+
 });
 
 // tell express to use ejs for rendering HTML files:
@@ -111,30 +101,30 @@ app.set('views', htmlDir);
 
 // Handle 404 - Keep this as a last route
 app.use(function(req, res, next) {
-    
+
     if (fs.existsSync(htmlDir + req.originalUrl)) {
       res.sendFile(htmlDir + req.originalUrl);
       return;
     }
-    
+
     if(httpstack.state===undefined) {
       // forward to serial
       console.log('forwarding query to serial:', req.originalUrl);
-      
+
       httpstack = {};
       httpstack.state = 'waiting';
       httpstack.req = req;
       httpstack.res = res;
-      
+
       forwartHTTPToSerial(req.originalUrl);
 
     } else {
-     
+
       queryqueue.push({
         res:res,
         req:req
       });
-      
+
       console.log('queued query:', req.originalUrl, queryqueue.length, 'behind');
 
     }
@@ -170,26 +160,23 @@ const handleHTTPResponse = function(httpstack) {
   let success = false;
   let res = httpstack.res;
   let req = httpstack.req;
-  
+
   if(res===undefined) {
     console.log('query died');
     httpStackOnComplete();
     return;
   }
-  
+
   keys.forEach(function(key) {
     if(key=='res' || key=='req' || key=='oncomplete') return;
     if(key!=='body') {
-      //console.log(key, httpstack[key]);
       if(key.match(/^[a-z0-9_-]+$/i)) {
         res.setHeader(key, httpstack[key]); 
-      } else {
-        //console.log('skipping poisonous header', key); 
       }
     } else {
       res.end(httpstack['body']);
       success = true;
-      
+
       if( !req.originalUrl.includes('.json') ) {
         // persist only static files
         fs.writeFile(htmlDir + req.originalUrl, httpstack['body'], function(err) {
