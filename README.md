@@ -8,6 +8,7 @@ as specified in the esp8266_deauther's ReadME.
 
 *INSTALLATION*
 
+  - `git submodule init`
   - `npm install`
   - Copy the SerialServer folder into the /libraries/ folder of your SDK installation.
   - Modify the esp8266_deauther.ino as follows:
